@@ -1,0 +1,15 @@
+[Unit]
+Description=Video Capture Streaming Service
+After=pulseaudio.service
+Requires=pulseaudio.service
+PartOf=stream.target
+
+[Service]
+Restart=always
+RestartSec=1s
+ExecStart=/home/streamwall/streamcapture.sh
+Environment=GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0/
+CPUAffinity={{ streamcapture_cpu_affinity }}
+
+[Install]
+WantedBy=stream.target

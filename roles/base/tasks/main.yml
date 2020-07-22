@@ -1,0 +1,17 @@
+---
+- name: Ensure gnupg installed
+  apt:
+    name: gnupg2
+    state: present
+  register: gnupg2_installed
+  ignore_errors: true
+
+- name: Update apt cache if repos not loaded
+  apt:
+    update_cache: yes
+  when: gnupg2_installed.failed
+
+- name: Install git
+  apt:
+    name: git
+    state: present

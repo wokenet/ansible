@@ -1,0 +1,18 @@
+user_service_dir: "/home/streamwall/.config/systemd/user"
+streamwall_config_path: "/home/streamwall/streamwall.config.toml"
+streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
+streamdelay_overlay_image_path: "/home/streamwall/streamdelay-overlay.png"
+
+xorg_conf: xorg.conf.j2
+xorg_nvidia_busid: ""
+streamwall_cpu_affinity: ""
+streamcapture_cpu_affinity: ""
+streamcapture_x264_threads: 0
+streamdelay_cpu_affinity: ""
+streamdelay_x264_threads: 0
+
+stream_ingest_url: "{{ vault_stream_ingest_url }}"
+streamwall_announce_api_token: "{{ vault_streamwall_announce_api_token }}"
+streamwall_control_user: "{{ vault_streamwall_control_user }}"
+streamwall_control_password: "{{ vault_streamwall_control_password }}"
+streamdelay_api_key: "{{ vault_streamdelay_api_key }}"

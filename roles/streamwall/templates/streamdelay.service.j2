@@ -1,0 +1,14 @@
+[Unit]
+Description=Streamdelay Service
+PartOf=stream.target
+
+[Service]
+Restart=always
+RestartSec=1s
+ExecStart=npm start -- --config={{ streamdelay_config_path }}
+Environment=GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0/
+WorkingDirectory=/home/streamwall/streamdelay
+CPUAffinity={{ streamdelay_cpu_affinity }}
+
+[Install]
+WantedBy=stream.target

@@ -1,0 +1,7 @@
+{{ inventory_hostname }}
+
+reverse_proxy http://{{ streamwall_control_hostname }}:{{ streamwall_control_port }}
+
+log {
+  output file /var/log/caddy/streamwall.log
+}

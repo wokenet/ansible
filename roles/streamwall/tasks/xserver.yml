@@ -1,0 +1,26 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - xorg
+      - pulseaudio
+      - openbox
+    state: present
+
+- name: Set default desktop environment to openbox
+  alternatives:
+    name: x-session-manager
+    path: /usr/bin/openbox-session
+
+- name: Add xorg.conf file
+  template:
+    src: "{{ xorg_conf }}"
+    dest: /etc/X11/xorg.conf
+
+- name: Add xlogin service file
+  copy:
+    src: xlogin@.service
+    dest: /etc/systemd/system/xlogin@.service
+  notify:
+    - Reload systemd
+    - Start x for streamwall

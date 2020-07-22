@@ -1,0 +1,17 @@
+# Based on https://github.com/joukewitteveen/xlogin/blob/6e566b5b399005c4f62e6c275f91a3625baa1bef/xlogin%40.service.in
+[Unit]
+Description=Direct X login for user %i
+After=getty@tty7.service systemd-user-sessions.service graphical.target
+Conflicts=getty@tty7.service gdm.service
+
+[Service]
+User=%i
+WorkingDirectory=~
+TTYPath=/dev/tty7
+StandardInput=tty
+StandardOutput=tty
+PAMName=login
+ExecStart=startx
+
+[Install]
+WantedBy=graphical.target

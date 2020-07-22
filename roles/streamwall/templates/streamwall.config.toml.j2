@@ -1,0 +1,69 @@
+[window]
+# Window dimensions
+width = {{ stream_width }}
+height = {{ stream_height }}
+
+# Position a frameless window (useful for capturing w/ fixed screen positions)
+x = 0
+y = 0
+frameless = true
+
+# Set the background color (useful for chroma-keying)
+#background-color = "#0f0"
+
+[grid]
+count = {{ grid_count }}
+
+[control]
+# Address to serve control server from
+address = "{{ streamwall_control_address }}"
+
+# Override hostname and port
+hostname = "{{ streamwall_control_hostname }}"
+port = {{ streamwall_control_port }}
+
+# Username and password
+username = "{{ streamwall_control_user }}"
+password = "{{ streamwall_control_password }}"
+
+open = false
+
+[data]
+# By default, we use the woke.net streams data source.
+# You can add other URLs to fetch here:
+json-url = ["https://woke.net/api/streams.json"]
+
+# You can also specify .toml files on disk. Streamwall will reload the data whenever the file changes.
+# See example.streams.toml for a sample.
+#toml-file = ["./example.streams.toml"]
+
+[twitch]
+channel = "{{ channel_name }}"
+username = "{{ streamwall_announce_username }}"
+color = "{{ streamwall_announce_color }}"
+
+# Use https://twitchtokengenerator.com/?scope=chat:read+chat:edit to generate an OAuth token:
+token = "{{ streamwall_announce_api_token }}"
+
+    [twitch.announce]
+    template = "{{ streamwall_announce_template }}"
+    interval = {{ streamwall_announce_interval }}
+    delay = {{ streamwall_announce_delay }}
+
+[cert]
+# SSL certificates (optional)
+# If you specify an https:// URL for the "webserver" option, a certificate will be automatically generated and signed by Let's Encrypt.
+# For this to work, Streamwall must be accessible from both ports 80 and 443.
+
+# Uncomment to obtain a real certificate (otherwise a testing cert will be generated)
+#production = true
+
+# Email address to use when registering SSL certificate with Let's Encrypt
+#email = "hi@streamwall.io"
+
+# Directory to store certificate
+#dir = "../streamwall-cert"
+
+[streamdelay]
+endpoint = "http://{{ streamdelay_hostname }}:{{ streamdelay_port }}"
+key = "{{ streamdelay_api_key }}"

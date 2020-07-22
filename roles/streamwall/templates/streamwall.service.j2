@@ -1,0 +1,15 @@
+[Unit]
+Description=Streamwall Service
+After=pulseaudio.service
+Requires=pulseaudio.service
+PartOf=stream.target
+
+[Service]
+Restart=always
+RestartSec=1s
+ExecStart=npm start -- --config={{ streamwall_config_path }}
+WorkingDirectory=/home/streamwall/streamwall
+CPUAffinity={{ streamwall_cpu_affinity }}
+
+[Install]
+WantedBy=stream.target

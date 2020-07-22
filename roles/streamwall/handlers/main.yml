@@ -1,0 +1,55 @@
+---
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Start x for streamwall
+  systemd:
+    name: xlogin@streamwall
+    enabled: yes
+    state: started
+
+- name: Reload user systemd
+  systemd:
+    daemon_reload: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Reload caddy
+  systemd:
+    name: caddy
+    state: reloaded
+
+- name: Enable streamcapture
+  systemd:
+    name: streamcapture
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Enable streamdelay
+  systemd:
+    name: streamdelay
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Enable streamwall
+  systemd:
+    name: streamdelay
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Start stream
+  systemd:
+    name: stream.target
+    enabled: yes
+    state: started
+    scope: user
+  become: yes
+  become_user: streamwall

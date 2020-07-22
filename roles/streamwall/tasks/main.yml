@@ -1,0 +1,42 @@
+---
+- name: Create streamwall user
+  user:
+    name: streamwall
+    home: /home/streamwall
+
+- name: Create systemd user service directory
+  file:
+    path: "{{ user_service_dir }}"
+    state: directory
+    owner: streamwall
+    group: streamwall
+
+- name: Setup X server
+  include: xserver.yml
+  tags: xserver
+
+- name: Setup streamcapture
+  include: streamcapture.yml
+  tags: streamcapture
+
+- name: Setup streamwall
+  include: streamwall.yml
+  tags: streamwall
+
+- name: Setup streamdelay
+  include: streamdelay.yml
+  tags: streamdelay
+
+- name: Setup caddy
+  include: caddy.yml
+  tags: caddy
+
+- name: Add stream target service file
+  copy:
+    src: stream.target
+    dest: "{{ user_service_dir }}/stream.target"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Start stream

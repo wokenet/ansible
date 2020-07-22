@@ -1,0 +1,55 @@
+---
+- name: Install streamdelay dependencies
+  apt:
+    name:
+      - libgstreamer1.0-0
+      - libgstreamer1.0-dev
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-libav
+      - gstreamer1.0-pulseaudio
+      - libgstreamer-plugins-base1.0-dev
+      - libgstreamer-plugins-good1.0-dev
+      - libgstreamer-plugins-bad1.0-dev
+
+- name: Update streamdelay repo
+  git:
+    repo: https://github.com/chromakode/streamdelay.git
+    dest: /home/streamwall/streamdelay
+    version: release
+    update: yes
+    force: yes
+  become: yes
+  become_user: streamwall
+
+- name: Install streamdelay npm deps
+  npm:
+    path: /home/streamwall/streamdelay
+  become: yes
+  become_user: streamwall
+
+- name: Write streamdelay config
+  template:
+    src: streamdelay.config.json.j2
+    dest: "{{ streamdelay_config_path }}"
+    owner: streamwall
+    group: streamwall
+
+- name: Add streamdelay overlay image file
+  copy:
+    src: woke-bleep.png
+    dest: "{{ streamdelay_overlay_image_path }}"
+    owner: streamwall
+    group: streamwall
+
+- name: Add streamdelay service file
+  template:
+    src: streamdelay.service.j2
+    dest: "{{ user_service_dir }}/streamdelay.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Enable streamdelay
