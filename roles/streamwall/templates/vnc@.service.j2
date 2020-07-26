@@ -1,0 +1,11 @@
+[Unit]
+Description=VNC Service
+After=network.target graphical-session.target vnc.socket
+Requires=vnc.socket
+
+[Service]
+Type=simple
+ExecStart=x11vnc -inetd -passwd '{{ vnc_password }}'
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal

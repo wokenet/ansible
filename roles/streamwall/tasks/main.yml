@@ -31,6 +31,10 @@
   include: caddy.yml
   tags: caddy
 
+- name: Setup vnc
+  include: vnc.yml
+  tags: vnc
+
 - name: Add stream target service file
   copy:
     src: stream.target

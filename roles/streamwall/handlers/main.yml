@@ -45,6 +45,15 @@
   become: yes
   become_user: streamwall
 
+- name: Start vnc
+  systemd:
+    name: vnc.socket
+    enabled: yes
+    state: started
+    scope: user
+  become: yes
+  become_user: streamwall
+
 - name: Start stream
   systemd:
     name: stream.target

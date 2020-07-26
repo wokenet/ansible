@@ -1,0 +1,26 @@
+---
+- name: Install x11vnc
+  apt:
+    name:
+      - x11vnc
+    state: present
+
+- name: Add streamwall socket file
+  template:
+    src: vnc.socket.j2
+    dest: "{{ user_service_dir }}/vnc.socket"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Start vnc
+
+- name: Add streamwall service file
+  template:
+    src: vnc@.service.j2
+    dest: "{{ user_service_dir }}/vnc@.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Start vnc

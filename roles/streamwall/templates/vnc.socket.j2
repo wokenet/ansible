@@ -1,0 +1,10 @@
+[Unit]
+Description=VNC Socket
+PartOf=vnc.service
+
+[Socket]
+ListenStream=127.0.0.1:5900
+Accept=true
+
+[Install]
+WantedBy=sockets.target
