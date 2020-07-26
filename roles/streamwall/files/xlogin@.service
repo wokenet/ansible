@@ -12,6 +12,8 @@ StandardInput=tty
 StandardOutput=tty
 PAMName=login
 ExecStart=startx
+Restart=always
+RestartSec=1s
 
 [Install]
 WantedBy=graphical.target
