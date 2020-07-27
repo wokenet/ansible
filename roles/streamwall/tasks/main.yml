@@ -1,4 +1,8 @@
 ---
+- name: Set timezone to America/Los_Angeles
+  timezone:
+    name: America/Los_Angeles
+
 - name: Create streamwall user
   user:
     name: streamwall
