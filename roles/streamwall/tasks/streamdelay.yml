@@ -23,12 +23,14 @@
     force: yes
   become: yes
   become_user: streamwall
+  register: streamdelay_repo
 
 - name: Install streamdelay npm deps
   npm:
     path: /home/streamwall/streamdelay
   become: yes
   become_user: streamwall
+  when: streamdelay_repo.changed
 
 - name: Write streamdelay config
   template:

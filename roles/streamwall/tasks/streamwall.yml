@@ -47,12 +47,14 @@
     force: yes
   become: yes
   become_user: streamwall
+  register: streamwall_repo
 
 - name: Install streamwall npm deps
   npm:
     path: /home/streamwall/streamwall
   become: yes
   become_user: streamwall
+  when: streamwall_repo.changed
 
 - name: Write streamwall config
   template:
