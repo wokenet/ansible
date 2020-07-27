@@ -27,6 +27,10 @@
   include: streamdelay.yml
   tags: streamdelay
 
+- name: Setup overlays
+  include: overlays.yml
+  tags: overlays
+
 - name: Setup caddy
   include: caddy.yml
   tags: caddy
