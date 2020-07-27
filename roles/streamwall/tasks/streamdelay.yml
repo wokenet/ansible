@@ -28,6 +28,7 @@
 - name: Install streamdelay npm deps
   npm:
     path: /home/streamwall/streamdelay
+    ci: yes
   become: yes
   become_user: streamwall
   when: streamdelay_repo.changed

@@ -10,9 +10,10 @@
   become_user: streamwall
   register: overlays_repo
 
-- name: Install streamdelay npm deps
+- name: Install overlays npm deps
   npm:
     path: /home/streamwall/overlays
+    ci: yes
   become: yes
   become_user: streamwall
   when: overlays_repo.changed
