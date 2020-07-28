@@ -4,7 +4,7 @@ channel_name: woke
 stream_width: 1920
 stream_height: 1080
 stream_delay: 10
-stream_x264_bitrate: 5500
+stream_bitrate: 5500
 stream_x264_preset: "faster"
 stream_x264_psy_tune: "film"
 stream_nvenc_preset: "hq"
