@@ -14,6 +14,7 @@ PAMName=login
 ExecStart=startx
 Restart=always
 RestartSec=1s
+TimeoutStopSec=1s
 
 [Install]
 WantedBy=graphical.target
