@@ -47,7 +47,7 @@
 
 - name: Install nvenc gstreamer plugin
   copy:
-    src: /home/ansible/gst-plugins-bad/
+    src: /home/ansible/gst-plugins-bad/build/sys/nvenc/libgstnvenc.so
     dest: /usr/local/lib/gstreamer-1.0/
     remote_src: yes
   when: plugins_git.changed
