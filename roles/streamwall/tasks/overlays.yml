@@ -9,6 +9,7 @@
   become: yes
   become_user: streamwall
   register: overlays_repo
+  when: overlays_git_repo is defined and overlays_git_repo != ""
 
 - name: Install overlays npm deps
   npm:
