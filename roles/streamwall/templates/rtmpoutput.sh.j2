@@ -1,0 +1,7 @@
+#!/bin/bash
+
+gst-launch-1.0 -v \
+  srtsrc uri={{ rtmpoutput_in_uri }} ! queue ! tsparse set-timestamps=true ! tsdemux name=demux \
+  demux. ! queue ! h264parse ! mux. \
+  demux. ! queue ! aacparse ! mux. \
+  flvmux name=mux streamable=true ! queue ! rtmpsink enable-last-sample=false location="$1 live=1"

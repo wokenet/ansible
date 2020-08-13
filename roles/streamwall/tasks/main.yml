@@ -31,6 +31,10 @@
   include: streamdelay.yml
   tags: streamdelay
 
+- name: Setup rtmp outputs
+  include: rtmpoutput.yml
+  tags: rtmpoutput
+
 - name: Setup overlays
   include: overlays.yml
   tags: overlays
