@@ -49,5 +49,6 @@
   copy:
     src: /home/ansible/gst-plugins-bad/build/sys/nvenc/libgstnvenc.so
     dest: /usr/local/lib/gstreamer-1.0/
+    mode: +r
     remote_src: yes
   when: plugins_git.changed
