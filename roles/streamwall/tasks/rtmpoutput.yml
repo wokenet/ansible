@@ -1,0 +1,35 @@
+---
+- name: Install rtmpoutput dependencies
+  apt:
+    name:
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-tools
+
+- name: Add rtmpoutput script
+  template:
+    src: rtmpoutput.sh.j2
+    dest: /home/streamwall/rtmpoutput.sh
+    mode: +x
+    owner: streamwall
+    group: streamwall
+
+- name: Add xlogin service file
+  copy:
+    src: rtmpoutput.service.j2
+    dest: "{{ user_service_dir }}/rtmpoutput.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+
+- name: Enable RTMP outputs
+  systemd:
+    name: "rtmpoutput@{{ item }}"
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+  loop: "{{ stream_rtmp_destinations }}"
