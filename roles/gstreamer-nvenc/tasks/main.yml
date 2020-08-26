@@ -3,6 +3,7 @@
   apt:
     name:
       - build-essential
+      - cmake
       - meson
       - nvidia-cuda-dev
     state: present
