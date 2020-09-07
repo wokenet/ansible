@@ -16,7 +16,7 @@
 
 - name: Update streamdelay repo
   git:
-    repo: https://github.com/streamdelay/streamdelay.git
+    repo: https://github.com/streamwall/streamdelay.git
     dest: /home/streamwall/streamdelay
     version: release
     update: yes
