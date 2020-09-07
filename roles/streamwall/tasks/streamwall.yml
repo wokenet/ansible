@@ -40,7 +40,7 @@
 
 - name: Update streamwall repo
   git:
-    repo: https://github.com/chromakode/streamwall.git
+    repo: https://github.com/streamwall/streamwall.git
     dest: /home/streamwall/streamwall
     version: release
     update: yes
