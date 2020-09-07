@@ -1,0 +1,13 @@
+---
+- name: Provision woke server
+  hosts: wokeserver
+  remote_user: ansible
+  become: yes
+  tasks:
+    - name: restart stream
+      systemd:
+        name: stream.target
+        state: restarted
+        scope: user
+      become: yes
+      become_user: streamwall
