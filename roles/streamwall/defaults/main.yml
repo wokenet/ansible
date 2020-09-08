@@ -1,7 +1,7 @@
 user_service_dir: "/home/streamwall/.config/systemd/user"
 streamwall_config_path: "/home/streamwall/streamwall.config.toml"
 streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
-streamdelay_overlay_image_path: "/home/streamwall/streamdelay-overlay.png"
+streamdelay_overlay_image_path: "/home/streamwall/stream-content/content/bleep.png"
 
 xorg_conf: xorg.conf.j2
 xorg_nvidia_busid: ""
@@ -11,7 +11,7 @@ streamcapture_x264_threads: 0
 streamdelay_cpu_affinity: ""
 streamdelay_x264_threads: 0
 
-overlays_git_repo: "{{ vault_overlays_git_repo }}"
+content_git_repo: "{{ vault_content_git_repo | default('https://github.com/streamwall/example-content.git') }}"
 stream_rtmp_destinations: "{{ vault_stream_rtmp_destinations }}"
 streamwall_announce_api_token: "{{ vault_streamwall_announce_api_token }}"
 streamwall_control_user: "{{ vault_streamwall_control_user }}"

@@ -35,9 +35,9 @@
   include: rtmpoutput.yml
   tags: rtmpoutput
 
-- name: Setup overlays
-  include: overlays.yml
-  tags: overlays
+- name: Setup stream content
+  include: content.yml
+  tags: content
 
 - name: Setup caddy
   include: caddy.yml

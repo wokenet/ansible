@@ -40,13 +40,6 @@
     owner: streamwall
     group: streamwall
 
-- name: Add streamdelay overlay image file
-  copy:
-    src: woke-bleep.png
-    dest: "{{ streamdelay_overlay_image_path }}"
-    owner: streamwall
-    group: streamwall
-
 - name: Add streamdelay service file
   template:
     src: streamdelay.service.j2

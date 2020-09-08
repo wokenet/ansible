@@ -1,0 +1,28 @@
+---
+- name: Update content repo
+  git:
+    repo: "{{ content_git_repo }}"
+    dest: /home/streamwall/stream-content
+    version: release
+    update: yes
+    force: yes
+  become: yes
+  become_user: streamwall
+  register: content_repo
+  when: content_git_repo is not none
+
+- name: Install content npm deps
+  npm:
+    path: /home/streamwall/stream-content
+    ci: yes
+  become: yes
+  become_user: streamwall
+  when: content_repo.changed
+
+- name: Build content
+  command:
+    chdir: /home/streamwall/stream-content
+    cmd: npm run build
+  become: yes
+  become_user: streamwall
+  when: content_repo.changed

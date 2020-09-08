@@ -2,9 +2,9 @@
 
 reverse_proxy http://{{ streamwall_control_hostname }}:{{ streamwall_control_port }}
 
-route /overlays/* {
-  uri strip_prefix overlays
-  root * /home/streamwall/overlays/dist
+route /content/* {
+  uri strip_prefix content
+  root * /home/streamwall/stream-content/dist
   file_server
   header Cache-Control no-cache
 }
