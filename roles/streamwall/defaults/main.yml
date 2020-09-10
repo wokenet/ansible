@@ -1,5 +1,6 @@
 user_service_dir: "/home/streamwall/.config/systemd/user"
 streamwall_config_path: "/home/streamwall/streamwall.config.toml"
+streamwall_active_color: "#fff"
 streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
 streamdelay_overlay_image_path: "/home/streamwall/stream-content/content/bleep.png"
 
