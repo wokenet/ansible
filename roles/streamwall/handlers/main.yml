@@ -37,6 +37,17 @@
   become: yes
   become_user: streamwall
 
+- name: Enable RTMP outputs
+  systemd:
+    name: "rtmpoutput-{{ item.name }}"
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+  loop: "{{ stream_rtmp_destinations }}"
+  loop_control:
+    label: "{{ item.name }}"
+
 - name: Enable streamwall
   systemd:
     name: streamdelay

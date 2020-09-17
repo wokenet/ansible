@@ -27,14 +27,5 @@
     label: "{{ item.name }}"
   notify:
     - Reload user systemd
-
-- name: Enable RTMP outputs
-  systemd:
-    name: "rtmpoutput-{{ item.name }}"
-    enabled: yes
-    scope: user
-  become: yes
-  become_user: streamwall
-  loop: "{{ stream_rtmp_destinations }}"
-  loop_control:
-    label: "{{ item.name }}"
+    - Start x for streamwall
+    - Enable RTMP outputs
