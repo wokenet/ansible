@@ -6,6 +6,8 @@
       - cmake
       - meson
       - nvidia-cuda-dev
+      - libgstreamer1.0-dev
+      - libgstreamer-plugins-base1.0-dev
     state: present
 
 - name: Install nvidia deps
@@ -33,9 +35,7 @@
 - name: Configure nvenc gstreamer plugin
   shell:
     chdir: /home/ansible/gst-plugins-bad
-    cmd: |
-      rm -rf build
-      CUDA_PATH=/usr meson -Dauto_features=disabled -Dnvenc=enabled -Dgl=enabled build
+    cmd: CUDA_PATH=/usr meson -Dauto_features=disabled -Dnvenc=enabled -Dgl=enabled build
   become: no
   when: plugins_git.changed
 
@@ -44,6 +44,12 @@
     chdir: /home/ansible/gst-plugins-bad/build
     cmd: ninja
   become: no
+  when: plugins_git.changed
+
+- name: Create local gstreamer plugins directory
+  file:
+    path: /usr/local/lib/gstreamer-1.0/
+    state: directory
   when: plugins_git.changed
 
 - name: Install nvenc gstreamer plugin
