@@ -9,3 +9,11 @@ Currently, this consists of configuration for creating a remote
 [Streamwall](https://github.com/chromakode/streamwall) stream server. This
 requires pretty beefy dedicated hardware -- currently we're running on a system
 with a Ryzen 3900X and an NVIDIA RTX 4000.
+
+
+# TODOs
+
+* Disable power management
+* Fix streamwall not starting on boot.
+* Add more netdata things.
+* Fix netdata cloud enrollment.

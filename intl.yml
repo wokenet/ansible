@@ -1,6 +1,6 @@
 ---
 - name: Provision woke server
-  hosts: wokeserver
+  hosts: intl
   remote_user: ansible
   become: yes
   roles:
@@ -8,3 +8,4 @@
     - gstreamer-nvenc
     - geerlingguy.nodejs
     - streamwall
+    - mrlesmithjr.netdata

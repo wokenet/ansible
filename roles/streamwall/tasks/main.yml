@@ -7,6 +7,7 @@
   user:
     name: streamwall
     home: /home/streamwall
+    shell: /bin/bash
 
 - name: Create systemd user service directory
   file:

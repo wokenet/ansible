@@ -3,7 +3,7 @@
   git:
     repo: "{{ content_git_repo }}"
     dest: /home/streamwall/stream-content
-    version: release
+    version: main
     update: yes
     force: yes
   become: yes
