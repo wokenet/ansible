@@ -1,7 +1,7 @@
 [Unit]
 Description=Streamwall Stream
-BindsTo=graphical-session.target
-After=graphical-session.target
+BindsTo=default.target
+After=default.target
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
