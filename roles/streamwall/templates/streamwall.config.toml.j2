@@ -36,7 +36,7 @@ interval = 5
 
 # By default, we use the woke.net streams data source.
 # You can add other URLs to fetch here:
-json-url = ["https://woke.net/api/streams.json", "https://{{ inventory_hostname }}/content/overlays.json"]
+json-url = {{ streamwall_json_sources | to_json }}
 
 # You can also specify .toml files on disk. Streamwall will reload the data whenever the file changes.
 # See example.streams.toml for a sample.

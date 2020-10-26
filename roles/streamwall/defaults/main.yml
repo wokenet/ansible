@@ -17,5 +17,8 @@ stream_rtmp_destinations: "{{ vault_stream_rtmp_destinations }}"
 streamwall_announce_api_token: "{{ vault_streamwall_announce_api_token }}"
 streamwall_control_user: "{{ vault_streamwall_control_user }}"
 streamwall_control_password: "{{ vault_streamwall_control_password }}"
+streamwall_json_sources:
+  - "https://woke.net/api/streams.json"
+  - "https://{{ inventory_hostname }}/content/overlays.json"
 streamdelay_api_key: "{{ vault_streamdelay_api_key }}"
 vnc_password: "{{ vault_vnc_password }}"
