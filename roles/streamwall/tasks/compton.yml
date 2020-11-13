@@ -1,0 +1,17 @@
+---
+- name: Install compton and hsetroot
+  apt:
+    name:
+      - compton
+      - hsetroot
+    state: present
+
+- name: Add compton service file
+  template:
+    src: compton.service.j2
+    dest: "{{ user_service_dir }}/compton.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Start compton

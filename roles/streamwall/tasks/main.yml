@@ -19,6 +19,10 @@
   include: xserver.yml
   tags: xserver
 
+- name: Setup compton
+  include: compton.yml
+  tags: compton
+
 - name: Setup streamcapture
   include: streamcapture.yml
   tags: streamcapture

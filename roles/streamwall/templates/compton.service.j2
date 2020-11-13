@@ -1,0 +1,13 @@
+[Unit]
+Description=Compton Compositor
+BindsTo=default.target
+After=default.target
+
+[Service]
+Restart=always
+RestartSec=1s
+ExecStartPre=hsetroot -solid #000000
+ExecStart=compton --backend xrender
+
+[Install]
+WantedBy=default.target
