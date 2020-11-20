@@ -4,9 +4,9 @@ reverse_proxy http://{{ streamwall_control_hostname }}:{{ streamwall_control_por
 
 route /content/* {
   uri strip_prefix content
+  header Cache-Control no-cache
   root * /home/streamwall/stream-content/dist
   file_server
-  header Cache-Control no-cache
 }
 
 log {
