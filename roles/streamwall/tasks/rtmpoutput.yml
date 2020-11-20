@@ -27,5 +27,4 @@
     label: "{{ item.name }}"
   notify:
     - Reload user systemd
-    - Start x for streamwall
     - Enable RTMP outputs
