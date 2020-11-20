@@ -9,6 +9,19 @@ route /content/* {
   file_server
 }
 
+route /live/* {
+  uri strip_prefix live
+  header Access-Control-Allow-Origin "*"
+  header Cache-Control "no-store, max-age=0"
+  header /*.ts Cache-Control max-age=600
+  root * /home/streamwall/hls
+  file_server
+}
+
+basicauth /live/* {
+  cdn {{ hashed_cdn_origin_password }}
+}
+
 log {
   output file /var/log/caddy/streamwall.log
 }

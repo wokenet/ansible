@@ -1,0 +1,7 @@
+#!/bin/bash
+
+gst-launch-1.0 -v \
+  srtsrc uri={{ hlsoutput_in_uri }} ! queue ! tsparse ! tsdemux name=demux \
+  demux. ! queue ! h264parse ! queue ! sink.video \
+  demux. ! queue ! aacparse ! queue ! sink.audio \
+  hlssink2 name=sink max-files={{ hlsoutput_max_files }} location={{ hls_output_path }}/segment%05d.ts playlist-location={{ hls_output_path }}/playlist.m3u8 target-duration={{ hlsoutput_chunk_duration }}

@@ -3,6 +3,7 @@ streamwall_config_path: "/home/streamwall/streamwall.config.toml"
 streamwall_active_color: "#fff"
 streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
 streamdelay_overlay_image_path: "/home/streamwall/stream-content/content/bleep.png"
+hls_output_path: "/home/streamwall/hls"
 
 xorg_conf: xorg.conf.j2
 xorg_nvidia_busid: ""
@@ -22,3 +23,6 @@ streamwall_json_sources:
   - "https://{{ inventory_hostname }}/content/overlays.json"
 streamdelay_api_key: "{{ vault_streamdelay_api_key }}"
 vnc_password: "{{ vault_vnc_password }}"
+
+# Password to authenticate CDN requests to the origin
+cdn_origin_password: "{{ vault_cdn_origin_password }}"

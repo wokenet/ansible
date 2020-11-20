@@ -39,6 +39,10 @@
   include: rtmpoutput.yml
   tags: rtmpoutput
 
+- name: Setup HLS output
+  include: hlsoutput.yml
+  tags: hlsoutput
+
 - name: Setup stream content
   include: content.yml
   tags: content

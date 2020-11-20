@@ -22,6 +22,13 @@
     owner: caddy
     group: caddy
 
+- name: Hash origin password
+  shell: caddy hash-password -plaintext {{ cdn_origin_password }}
+  register: caddy_hash_result
+
+- set_fact:
+    hashed_cdn_origin_password: "{{ caddy_hash_result.stdout }}"
+
 - name: Add Caddyfile
   template:
     src: Caddyfile.j2
