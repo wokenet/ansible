@@ -1,0 +1,8 @@
+---
+- name: Restart anchorbot
+  systemd:
+    name: anchorbot
+    enabled: yes
+    state: restarted
+    daemon_reload: yes
+  become: yes

@@ -8,3 +8,11 @@
     - gstreamer-nvenc
     - geerlingguy.nodejs
     - streamwall
+
+- name: Set up anchorbot
+  hosts: anchorbot
+  remote_user: ansible
+  become: yes
+  tags: anchorbot
+  roles:
+    - anchorbot

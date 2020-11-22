@@ -1,0 +1,44 @@
+---
+- name: Create anchorbot user
+  user:
+    name: anchorbot
+    home: /home/anchorbot
+
+- name: Update anchorbot repo
+  git:
+    repo: https://github.com/wokenet/anchorbot.git
+    dest: /home/anchorbot/anchorbot
+    version: release
+    update: yes
+    force: yes
+  become: yes
+  become_user: anchorbot
+  register: anchorbot_repo
+  notify:
+    - Restart anchorbot
+
+- name: Install anchorbot npm deps
+  npm:
+    path: /home/anchorbot/anchorbot
+    ci: yes
+  become: yes
+  become_user: anchorbot
+  when: anchorbot_repo.changed
+
+- name: Write anchorbot config
+  template:
+    src: anchorbot.config.toml.j2
+    dest: "{{ anchorbot_config_path }}"
+    owner: anchorbot
+    group: anchorbot
+  notify:
+    - Restart anchorbot
+
+- name: Add anchorbot service file
+  template:
+    src: anchorbot.service.j2
+    dest: "/etc/systemd/system/anchorbot.service"
+    owner: root
+    group: root
+  notify:
+    - Restart anchorbot

@@ -1,0 +1,5 @@
+anchorbot_config_path: "/home/anchorbot/anchorbot.config.toml"
+anchorbot_server: "https://matrix.woke.net"
+anchorbot_user_id: "@wokebot:woke.net"
+anchorbot_room_id: "!doYmXmbbmJCuwjKvff:woke.net"
+anchorbot_access_token: "{{ vault_anchorbot_access_token }}"

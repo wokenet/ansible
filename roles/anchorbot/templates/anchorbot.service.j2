@@ -1,0 +1,14 @@
+[Unit]
+Description=Anchorbot Service
+After=network.target
+
+[Service]
+User=anchorbot
+Group=anchorbot
+Restart=always
+RestartSec=1s
+ExecStart=npm start -- --config={{ anchorbot_config_path }}
+WorkingDirectory=/home/anchorbot/anchorbot
+
+[Install]
+WantedBy=multi-user.target
