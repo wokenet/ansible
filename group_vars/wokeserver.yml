@@ -21,8 +21,8 @@ streamcapture_nvenc_preset: "hq"
 streamcapture_encoder: "nvenc"
 rtmpoutput_in_uri: "srt://127.0.0.1:5001?mode=caller"
 hlsoutput_in_uri: "{{ rtmpoutput_in_uri }}"
-hlsoutput_max_files: 5
-hlsoutput_chunk_duration: 10
+hlsoutput_max_files: 10
+hlsoutput_chunk_duration: 6
 streamwall_control_address: "https://{{ inventory_hostname }}"
 streamwall_control_hostname: "localhost"
 streamwall_control_port: 8000
