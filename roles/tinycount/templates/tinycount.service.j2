@@ -11,7 +11,7 @@ ExecStart=npm start
 WorkingDirectory=/home/tinycount/tinycount
 Environment=PORT={{ tinycount_port }}
 Environment=INTERVAL_SECS={{ tinycount_interval_secs }}
-Environment=ALLOWED_ORIGIN={{ tinycount_allowed_origin }}
+Environment=ALLOWED_ORIGINS={{ tinycount_allowed_origins | join(',') }}
 
 [Install]
 WantedBy=multi-user.target
