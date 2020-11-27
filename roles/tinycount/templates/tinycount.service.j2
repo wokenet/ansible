@@ -1,0 +1,17 @@
+[Unit]
+Description=TinyCount Service
+After=network.target
+
+[Service]
+User=tinycount
+Group=tinycount
+Restart=always
+RestartSec=1s
+ExecStart=npm start
+WorkingDirectory=/home/tinycount/tinycount
+Environment=PORT={{ tinycount_port }}
+Environment=INTERVAL_SECS={{ tinycount_interval_secs }}
+Environment=ALLOWED_ORIGIN={{ tinycount_allowed_origin }}
+
+[Install]
+WantedBy=multi-user.target

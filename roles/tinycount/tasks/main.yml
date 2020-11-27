@@ -1,0 +1,36 @@
+---
+- name: Create tinycount user
+  user:
+    name: tinycount
+    home: /home/tinycount
+
+- name: Update tinycount repo
+  git:
+    repo: https://github.com/wokenet/tinycount.git
+    dest: /home/tinycount/tinycount
+    version: release
+    update: yes
+    force: yes
+  become: yes
+  become_user: tinycount
+  register: tinycount_repo
+  notify:
+    - Restart tinycount
+
+- name: Add tinycount service file
+  template:
+    src: tinycount.service.j2
+    dest: "/etc/systemd/system/tinycount.service"
+    owner: root
+    group: root
+  notify:
+    - Restart tinycount
+
+- name: Add tinycount caddy file
+  template:
+    src: tinycount.caddy.j2
+    dest: "/etc/caddy/tinycount.caddy"
+    owner: root
+    group: root
+  notify:
+    - Reload caddy

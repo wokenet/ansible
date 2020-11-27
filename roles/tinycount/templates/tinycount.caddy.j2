@@ -1,0 +1,4 @@
+route /viewers/* {
+  uri strip_prefix viewers
+  reverse_proxy http://localhost:{{ tinycount_port }}
+}

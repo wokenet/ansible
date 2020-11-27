@@ -16,3 +16,11 @@
   tags: anchorbot
   roles:
     - anchorbot
+
+- name: Set up tinycount
+  hosts: tinycount
+  remote_user: ansible
+  become: yes
+  tags: tinycount
+  roles:
+    - tinycount

@@ -1,0 +1,3 @@
+tinycount_interval_secs: 60
+tinycount_port: 8123
+tinycount_allowed_origin: ''
