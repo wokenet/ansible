@@ -1,0 +1,28 @@
+#!/bin/bash
+
+backupPath="/var/streambackup"
+timeoutTime={{ streambackup_timeout_time }}
+
+while :
+do
+    timestamp=`date +%Y-%m-%d-%H%M%S`
+    backupName="{{ channel_name }}-backup-$timestamp.flv"
+    streamStatus=`curl -s -H "Streamdelay-API-Key:$(jq .apiKey {{ streamdelay_config_path }} | sed 's/"//g')" http://127.0.0.1:8404/status | jq .state.stream`
+
+
+
+    if [[ $streamStatus == "\"stopped\"" ]]; then
+        echo "Stream is $streamStatus. Delaying stream capture for backup."
+        echo "Waiting 30 seconds before polling again."
+        sleep 30
+    else
+        echo "Starting stream capture for backup to $backupName."
+
+        timeout $timeoutTime gst-launch-1.0 -v -e \
+            srtsrc uri=srt://127.0.0.1:5000?mode=caller ! queue ! tsparse set-timestamps=true ! tsdemux name=demux \
+            demux. ! queue max-size-time=0 max-size-buffers=0 ! h264parse ! mux. \
+            demux. ! queue max-size-time=0 max-size-buffers=0 ! aacparse ! mux. \
+            flvmux name=mux streamable=true ! queue ! filesink enable-last-sample=false location="$backupPath/$backupName"
+    fi
+done
+exit 0

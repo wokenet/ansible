@@ -1,0 +1,9 @@
+---
+
+streambackup_timeout_time: 1800
+channel_name: ""
+streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
+user_service_dir: "/home/streamwall/.config/systemd/user"
+
+b2_account_id: "{{ vault_b2_account_id }}"
+b2_application_key: "{{ vault_b2_application_key }}"

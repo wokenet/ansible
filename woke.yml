@@ -8,6 +8,7 @@
     - gstreamer-nvenc
     - geerlingguy.nodejs
     - streamwall
+    - streambackup
 
 - name: Set up anchorbot
   hosts: anchorbot

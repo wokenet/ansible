@@ -1,0 +1,32 @@
+---
+- name: Reload user systemd
+  systemd:
+    daemon_reload: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Enable streambackup
+  systemd:
+    name: streambackup
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Enable streambackup-upload
+  systemd:
+    name: streambackup-upload
+    enabled: yes
+    scope: user
+  become: yes
+  become_user: streamwall
+
+- name: Start streambackup
+  systemd:
+    name: streambackup.target
+    enabled: yes
+    state: started
+    scope: user
+  become: yes
+  become_user: streamwall

@@ -1,0 +1,27 @@
+---
+- name: Install streambackup dependencies
+  apt:
+    name:
+      - backblaze-b2
+
+- name: Authorize B2 account via CLI
+  shell: b2 authorize-account {{ b2_account_id }} {{ b2_application_key }}
+  become_user: streamwall
+
+- name: Add streambackup-upload script
+  template:
+    src: streambackup-upload.sh.j2
+    dest: /home/streamwall/streambackup-upload.sh
+    mode: +x
+    owner: streamwall
+    group: streamwall
+
+- name: Add streambackup-upload service file
+  copy:
+    src: streambackup-upload.service.j2
+    dest: "{{ user_service_dir }}/streambackup-upload.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Enable streambackup-upload

@@ -1,0 +1,30 @@
+---
+- name: Install streambackup dependencies
+  apt:
+    name:
+      - jq
+
+- name: Add streambackup script
+  template:
+    src: streambackup.sh.j2
+    dest: /home/streamwall/streambackup.sh
+    mode: +x
+    owner: streamwall
+    group: streamwall
+
+- name: Create streambackup directory
+  file:
+    path: "/var/streambackup"
+    state: directory
+    owner: root
+    group: streamwall
+
+- name: Add streambackup service file
+  copy:
+    src: streambackup.service.j2
+    dest: "{{ user_service_dir }}/streambackup.service"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Enable streambackup

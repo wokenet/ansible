@@ -1,0 +1,7 @@
+[Unit]
+Description=Streambackup Service
+BindsTo=stream.target
+After=stream.target
+
+[Install]
+WantedBy=stream.target

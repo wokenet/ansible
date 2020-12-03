@@ -58,7 +58,7 @@
 
 - name: Enable streamwall
   systemd:
-    name: streamdelay
+    name: streamwall
     enabled: yes
     scope: user
   become: yes

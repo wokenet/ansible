@@ -1,0 +1,19 @@
+---
+
+- name: Setup streambackup service
+  include: streambackup.yml
+  tags: streambackup
+
+- name: Setup b2upload service
+  include: b2upload.yml
+  tags: b2upload
+
+- name: Add streambackup target service file
+  copy:
+    src: streambackup.target
+    dest: "{{ user_service_dir }}/streambackup.target"
+    owner: streamwall
+    group: streamwall
+  notify:
+    - Reload user systemd
+    - Start streambackup

@@ -1,0 +1,11 @@
+[Unit]
+Description=Stream VOD Backup Uploader
+PartOf=streambackup.target
+
+[Service]
+Restart=always
+RestartSec=1s
+ExecStart=/home/streamwall/streambackup-upload.sh
+
+[Install]
+WantedBy=streambackup.target

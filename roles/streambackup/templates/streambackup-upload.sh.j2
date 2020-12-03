@@ -1,0 +1,34 @@
+#!/bin/bash
+
+backupPath="/var/streambackup"
+bucketName="{{ channel_name }}-backup"
+
+cd $backupPath
+while :
+do
+    if [[ `ls -t *.flv 2> /dev/null` ]]
+    then
+        for file in `ls -t *.flv`
+        do
+                if [[ `lsof -w | grep $file` ]]
+                then
+                        echo "$file in use..."
+                else
+                        echo "$file gonna do stuff to it..."
+                        b2 upload-file $bucketName $file $file
+                        if [ $? -eq 0 ]; then
+                            echo "Upload successful. Deleting $file..."
+                            rm $file
+                        else
+                            echo "Upload failed..."
+                        fi
+                fi
+                sleep 1
+
+        done
+    else
+        "$backupPath empty. Trying again in 300 seconds..."
+        sleep 300
+    fi
+done
+exit 0
