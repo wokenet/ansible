@@ -7,7 +7,7 @@ while :
 do
     timestamp=`date +%Y-%m-%d-%H%M%S`
     backupName="{{ channel_name }}-backup-$timestamp.flv"
-    streamStatus=`curl -s -H "Streamdelay-API-Key:$(jq .apiKey {{ streamdelay_config_path }} | sed 's/"//g')" http://127.0.0.1:8404/status | jq .state.stream`
+    streamStatus=`curl -s -H "Streamdelay-API-Key:$(jq .apiKey {{ streamdelay_config_path }} | sed 's/"//g')" http://{{ streamdelay_host }}:{{ streamdelay_port }}/status | jq .state.stream`
 
 
 
