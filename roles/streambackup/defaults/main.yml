@@ -2,6 +2,8 @@
 
 streambackup_timeout_time: 1800
 channel_name: ""
+streamdelay_host: ""
+streamdelay_port: ""
 streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
 user_service_dir: "/home/streamwall/.config/systemd/user"
 
