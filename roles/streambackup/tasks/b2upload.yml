@@ -5,7 +5,7 @@
       - backblaze-b2
 
 - name: Authorize B2 account via CLI
-  shell: b2 authorize-account {{ b2_account_id }} {{ b2_application_key }}
+  shell: backblaze-b2 authorize-account {{ b2_account_id }} {{ b2_application_key }}
   become_user: streamwall
 
 - name: Add streambackup-upload script

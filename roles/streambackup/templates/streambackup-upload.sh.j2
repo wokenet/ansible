@@ -15,7 +15,7 @@ do
                         echo "$file in use..."
                 else
                         echo "$file gonna do stuff to it..."
-                        b2 upload-file $bucketName $file $file
+                        backblze-b2 upload-file $bucketName $file $file
                         if [ $? -eq 0 ]; then
                             echo "Upload successful. Deleting $file..."
                             rm $file
