@@ -18,6 +18,7 @@
     state: directory
     owner: root
     group: streamwall
+    mode: 0775
 
 - name: Add streambackup service file
   copy:
