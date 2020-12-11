@@ -1,0 +1,13 @@
+---
+
+- name: Install netdata
+  include: install.yml
+  tags: netdata_install
+
+- name: Configure netdata
+  include: configure.yml
+  tags: netdata_configure
+
+- name: Claim netdata agent on netdata.cloud
+  include: claim.yml
+  tags: netdata_claim

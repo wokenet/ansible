@@ -1,0 +1,8 @@
+---
+netdata_hostname: "{{ ansible_hostname }}"
+netdata_claim_token: "{{ vault_netdata_claim_token }}"
+netdata_claim_rooms: "{{ vault_netdata_claim_room }}"
+netdata_claim_url: https://app.netdata.cloud
+reclaim: false
+dbengine_multihost_disk_space: 2048
+web_mode: none
