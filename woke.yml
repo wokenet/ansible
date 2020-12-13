@@ -10,6 +10,7 @@
     - streamwall
     - streambackup
 
+
 - name: Set up anchorbot
   hosts: anchorbot
   remote_user: ansible
@@ -25,3 +26,11 @@
   tags: tinycount
   roles:
     - tinycount
+
+- name: Setup netdata
+  hosts: wokeserver
+  remote_user: ansible
+  become: yes
+  tags: netdata
+  roles:
+    - netdata
