@@ -6,4 +6,3 @@
     group: root
     mode: u=wrx,g=rx,o=r,+x
   notify: Restart Netdata
-

@@ -31,4 +31,3 @@
     notify: Restart Netdata
     become: yes
   when: reclaim == true
-

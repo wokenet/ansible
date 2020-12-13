@@ -28,7 +28,7 @@
     - tinycount
 
 - name: Setup netdata
-  hosts: tinycount
+  hosts: wokeserver
   remote_user: ansible
   become: yes
   tags: netdata
