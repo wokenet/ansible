@@ -1,7 +1,11 @@
 server = "{{ anchorbot_server }}"
 token = "{{ anchorbot_access_token }}"
 userId = "{{ anchorbot_user_id }}"
-roomId = "{{ anchorbot_room_id }}"
+
+[rooms]
+anchor = "{{ anchorbot_anchor_room_id }}"
+announcements = "{{ anchorbot_announcements_room_id }}"
+curators = "{{ anchorbot_curators_room_id }}"
 
 [alias.woke]
 title = "woke.net"
