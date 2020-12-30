@@ -1,28 +1,27 @@
----
-- name: Install hlsoutput dependencies
-  apt:
-    name:
-      - gstreamer1.0-plugins-bad
-
-- name: Create HLS data directory
+- name: Remove hlsoutput script
   file:
-    path: "{{ hls_output_path }}"
-    state: directory
+    path: /home/streamwall/hlsoutput.sh
+    state: absent
 
-- name: Add hlsoutput script
-  template:
-    src: hlsoutput.sh.j2
-    dest: /home/streamwall/hlsoutput.sh
-    mode: +x
-    owner: streamwall
-    group: streamwall
+- name: Disable hlsoutput service
+  systemd:
+    name: hlsoutput
+    enabled: no
+    state: stopped
+    scope: user
+  register: disable_hlsoutput_result
+  failed_when: "disable_hlsoutput_result is failed and 'Could not find the requested service' not in disable_hlsoutput_result.msg"
+  become: yes
+  become_user: streamwall
 
-- name: Add hlsoutput service file
-  template:
-    src: hlsoutput.service.j2
-    dest: "{{ user_service_dir }}/hlsoutput.service"
-    owner: streamwall
-    group: streamwall
+- name: Remove hlsoutput service file
+  file:
+    path: "{{ user_service_dir }}/hlsoutput.service"
+    state: absent
   notify:
     - Reload user systemd
-    - Enable HLS output
+
+- name: Remove HLS data directory
+  file:
+    path: "{{ hls_output_path }}"
+    state: absent

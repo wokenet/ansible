@@ -1,28 +1,23 @@
 ---
-- name: Install streamcapture dependencies
-  apt:
-    name:
-      - gstreamer1.0-plugins-base
-      - gstreamer1.0-plugins-good
-      - gstreamer1.0-plugins-bad
-      - gstreamer1.0-plugins-ugly
-      - gstreamer1.0-tools
-      - swh-plugins
+- name: Remove streamcapture script
+  file:
+    path: /home/streamwall/streamcapture.sh
+    state: absent
 
-- name: Add streamcapture script
-  template:
-    src: streamcapture.sh.j2
-    dest: /home/streamwall/streamcapture.sh
-    mode: +x
-    owner: streamwall
-    group: streamwall
+- name: Disable streamcapture service
+  systemd:
+    name: streamcapture
+    enabled: no
+    state: stopped
+    scope: user
+  register: disable_streamcapture_result
+  failed_when: "disable_streamcapture_result is failed and 'Could not find the requested service' not in disable_streamcapture_result.msg"
+  become: yes
+  become_user: streamwall
 
-- name: Add streamcapture service file
-  template:
-    src: streamcapture.service.j2
-    dest: "{{ user_service_dir }}/streamcapture.service"
-    owner: streamwall
-    group: streamwall
+- name: Remove streamcapture service file
+  file:
+    path: "{{ user_service_dir }}/streamcapture.service"
+    state: absent
   notify:
     - Reload user systemd
-    - Enable streamcapture

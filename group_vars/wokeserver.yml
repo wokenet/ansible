@@ -4,25 +4,12 @@ channel_name: woke
 stream_width: 1920
 stream_height: 1080
 stream_delay: 10
-stream_bitrate: 5500
-stream_x264_preset: "faster"
-stream_x264_psy_tune: "film"
-stream_nvenc_preset: "hq"
+stream_segment_duration: 4
 grid_count: 6
-streamdelay_in_uri: "srt://127.0.0.1:5000?mode=caller"
-streamdelay_out_uri: "srt://127.0.0.1:5001?mode=listener"
+curators_srt_out_uri: "srt://:5000?mode=listener"
+streambackup_srt_in_uri: "srt://127.0.0.1:5000?mode=caller"
 streamdelay_hostname: "localhost"
 streamdelay_port: 8404
-streamdelay_encoder: "nvenc"
-streamcapture_out_uri: "srt://:5000?mode=listener"
-streamcapture_bitrate: 9000
-streamcapture_x264_preset: "ultrafast"
-streamcapture_nvenc_preset: "hq"
-streamcapture_encoder: "nvenc"
-rtmpoutput_in_uri: "srt://127.0.0.1:5001?mode=caller"
-hlsoutput_in_uri: "{{ rtmpoutput_in_uri }}"
-hlsoutput_max_files: 10
-hlsoutput_chunk_duration: 6
 streamwall_control_address: "https://{{ inventory_hostname }}"
 streamwall_control_hostname: "localhost"
 streamwall_control_port: 8000
@@ -37,3 +24,71 @@ streamcapture_cpu_affinity: "16,17,18,19"
 streamcapture_x264_threads: 8
 streamdelay_cpu_affinity: "20,21,22,23"
 streamdelay_x264_threads: 8
+
+streamdelay_in_pipeline: |
+  # Capture Streamwall X window video
+  ximagesrc show-pointer=false xname="Streamwall" use-damage=false ! queue ! video/x-raw,framerate=30/1 ! videoconvert ! identity name="videoinput"
+  # Capture pulseaudio audio and apply dynamic range compression
+  pulsesrc ! audioconvert ! ladspa-sc4-1882-so-sc4 threshold-level=-5 ratio=4 makeup-gain=10 ! ladspa-fast-lookahead-limiter-1913-so-fastlookaheadlimiter limit=-3 ! queue ! audioconvert ! audio/x-raw,channels=1 ! identity name="audioinput"
+
+streamdelay_out_pipeline: |
+  # Queue outputs from streamdelay
+  audioqueue. ! tee name=audiotee
+  videoqueue. ! tee name=videotee
+
+  # Encode Opus audio and send to shaka-packager
+  audiotee. ! queue ! audioconvert ! audioresample ! opusenc ! opusparse ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-opus
+
+  # Encode AAC audio (used by DASH/HLS and RTMP outputs)
+  audiotee. ! queue ! voaacenc bitrate=96000 ! aacparse ! queue ! tee name=aactee
+
+  # Send AAC audio and send to shaka-packager
+  aactee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-aac
+
+  # Encode VP9 and send to shaka-packager
+  videotee. ! queue ! vp9enc target-bitrate=4000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=16 max-intra-bitrate=500 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-1080
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! vp9enc target-bitrate=2500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=24 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-720
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=855,height=480 ! vp9enc target-bitrate=1000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-480
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! vp9enc target-bitrate=500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-360
+
+  # Encode H.264 1080p 5500kbps stream for DASH/HLS and to send to RTMP outputs
+  videotee. ! queue ! nvh264enc bitrate=5500 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! tee name=primaryh264tee
+
+  # Send H.264 1080p to shaka-packager
+  primaryh264tee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-1080
+
+  # Encode other H.264 streams and send to shaka-packager
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! nvh264enc bitrate=4000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-720
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=854,height=480 ! nvh264enc bitrate=2000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-480
+  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! nvh264enc bitrate=1000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-360
+
+  # Encode 9000 kbps "curator stream" for archival and monitoring
+  videotee. ! queue ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mpegtsmux ! queue ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
+
+  # Mux for RTMP outputs
+  flvmux name=rtmpflvmux streamable=true ! queue ! tee name=rtmpflvtee
+  primaryh264tee. ! queue ! rtmpflvmux.
+  aactee. ! queue ! rtmpflvmux.
+
+  # Send to RTMP outputs
+  {% for rtmp in stream_rtmp_destinations %}
+  rtmpflvtee. ! queue ! rtmpsink enable-last-sample=false location="{{ rtmp.url }} live=1"
+  {% endfor %}
+
+streamdelay_out_script: |
+  rm -f /home/streamwall/live/*;
+  /home/streamwall/packager-linux \
+    'in=/home/streamwall/ipc/packager-opus,stream=audio,bw=64000,init_segment=/home/streamwall/live/opus_init.webm,segment_template=/home/streamwall/live/opus_$Number$.webm' \
+    'in=/home/streamwall/ipc/packager-aac,stream=audio,bw=96000,init_segment=/home/streamwall/live/aac_init.mp4,segment_template=/home/streamwall/live/aac_$Number$.m4s,hls_group_id=audio' \
+    'in=/home/streamwall/ipc/packager-vp9-1080,stream=video,bw=4000000,init_segment=/home/streamwall/live/vp9_1080p_init.webm,segment_template=/home/streamwall/live/vp9_1080p_$Number$.webm' \
+    'in=/home/streamwall/ipc/packager-vp9-720,stream=video,bw=2500000,init_segment=/home/streamwall/live/vp9_720p_init.webm,segment_template=/home/streamwall/live/vp9_720p_$Number$.webm' \
+    'in=/home/streamwall/ipc/packager-vp9-480,stream=video,bw=1000000,init_segment=/home/streamwall/live/vp9_480p_init.webm,segment_template=/home/streamwall/live/vp9_480p_$Number$.webm' \
+    'in=/home/streamwall/ipc/packager-vp9-360,stream=video,bw=500000,init_segment=/home/streamwall/live/vp9_360p_init.webm,segment_template=/home/streamwall/live/vp9_360p_$Number$.webm' \
+    'in=/home/streamwall/ipc/packager-h264-1080,stream=video,bw=5500000,init_segment=/home/streamwall/live/h264_1080p_init.mp4,segment_template=/home/streamwall/live/h264_1080p_$Number$.m4s' \
+    'in=/home/streamwall/ipc/packager-h264-720,stream=video,bw=4000000,init_segment=/home/streamwall/live/h264_720p_init.mp4,segment_template=/home/streamwall/live/h264_720p_$Number$.m4s' \
+    'in=/home/streamwall/ipc/packager-h264-480,stream=video,bw=2000000,init_segment=/home/streamwall/live/h264_480p_init.mp4,segment_template=/home/streamwall/live/h264_480p_$Number$.m4s' \
+    'in=/home/streamwall/ipc/packager-h264-360,stream=video,bw=1000000,init_segment=/home/streamwall/live/h264_360p_init.mp4,segment_template=/home/streamwall/live/h264_360p_$Number$.m4s' \
+    --mpd_output /home/streamwall/live/dash.mpd \
+    --hls_master_playlist_output /home/streamwall/live/hls.m3u8 --hls_playlist_type=live \
+    --utc_timings=urn:mpeg:dash:utc:http-head:2014={{ stream_endpoint }}/dash.mpd \
+    --segment_duration={{ stream_segment_duration }} --time_shift_buffer_depth=60 --preserved_segments_outside_live_window=10

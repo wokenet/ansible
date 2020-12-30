@@ -10,9 +10,52 @@
       - gstreamer1.0-plugins-ugly
       - gstreamer1.0-libav
       - gstreamer1.0-pulseaudio
+      - gstreamer1.0-tools
       - libgstreamer-plugins-base1.0-dev
       - libgstreamer-plugins-good1.0-dev
       - libgstreamer-plugins-bad1.0-dev
+      - swh-plugins
+
+- name: Install shaka-packager
+  get_url:
+    url: https://github.com/google/shaka-packager/releases/download/v2.4.3/packager-linux
+    dest: /home/streamwall/packager-linux
+    mode: u+rwx
+    checksum: sha256:22365c83d4fad5b1a0a228f4bf2dcbb7f449d1d02b45426813b2a5e29ca3d164
+  become: yes
+  become_user: streamwall
+
+- name: Create IPC directory
+  file:
+    path: /home/streamwall/ipc
+    state: directory
+    owner: streamwall
+    group: streamwall
+
+- name: Create IPC FIFOs
+  command: mkfifo -m 660 /home/streamwall/ipc/{{ item }}
+  args:
+    creates: /home/streamwall/ipc/{{ item }}
+  loop:
+    - packager-opus
+    - packager-aac
+    - packager-vp9-1080
+    - packager-vp9-720
+    - packager-vp9-480
+    - packager-vp9-360
+    - packager-h264-1080
+    - packager-h264-720
+    - packager-h264-480
+    - packager-h264-360
+  become: yes
+  become_user: streamwall
+
+- name: Create live stream data directory
+  file:
+    path: /home/streamwall/live
+    state: directory
+    owner: streamwall
+    group: streamwall
 
 - name: Update streamdelay repo
   git:
@@ -35,7 +78,7 @@
 
 - name: Write streamdelay config
   template:
-    src: streamdelay.config.json.j2
+    src: streamdelay.config.toml.j2
     dest: "{{ streamdelay_config_path }}"
     owner: streamwall
     group: streamwall

@@ -1,0 +1,23 @@
+apiHostname = "{{ streamdelay_hostname }}"
+apiPort = {{ streamdelay_port }}
+apiKey = "{{ streamdelay_api_key }}"
+delaySeconds = {{ stream_delay }}
+width = {{ stream_width }}
+height = {{ stream_height }}
+pixelizeScale = 20
+overlayImg = "{{ streamdelay_overlay_image_path }}"
+start = false
+
+encoder = "none"
+
+inPipeline = """
+{{ streamdelay_in_pipeline}}
+"""
+
+outPipeline = """
+{{ streamdelay_out_pipeline }}
+"""
+
+outScript = """
+{{ streamdelay_out_script }}
+"""

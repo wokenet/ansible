@@ -1,9 +1,8 @@
 user_service_dir: "/home/streamwall/.config/systemd/user"
 streamwall_config_path: "/home/streamwall/streamwall.config.toml"
 streamwall_active_color: "#fff"
-streamdelay_config_path: "/home/streamwall/streamdelay.config.json"
+streamdelay_config_path: "/home/streamwall/streamdelay.config.toml"
 streamdelay_overlay_image_path: "/home/streamwall/stream-content/content/bleep.png"
-hls_output_path: "/home/streamwall/hls"
 
 xorg_conf: xorg.conf.j2
 xorg_nvidia_busid: ""
@@ -11,7 +10,6 @@ streamwall_cpu_affinity: ""
 streamcapture_cpu_affinity: ""
 streamcapture_x264_threads: 0
 streamdelay_cpu_affinity: ""
-streamdelay_x264_threads: 0
 
 content_git_repo: "{{ vault_content_git_repo | default('https://github.com/streamwall/example-content.git') }}"
 stream_rtmp_destinations: "{{ vault_stream_rtmp_destinations }}"
@@ -26,3 +24,9 @@ vnc_password: "{{ vault_vnc_password }}"
 
 # Password to authenticate CDN requests to the origin
 cdn_origin_password: "{{ vault_cdn_origin_password }}"
+
+# Stream server hostname (or override to set CDN endpoint)
+stream_endpoint: "https://{{ inventory_hostname }}"
+
+# Deprecated (to remove in the future)
+hls_output_path: "/home/streamwall/hls"

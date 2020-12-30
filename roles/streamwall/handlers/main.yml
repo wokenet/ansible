@@ -21,36 +21,9 @@
     name: caddy
     state: reloaded
 
-- name: Enable streamcapture
-  systemd:
-    name: streamcapture
-    enabled: yes
-    scope: user
-  become: yes
-  become_user: streamwall
-
 - name: Enable streamdelay
   systemd:
     name: streamdelay
-    enabled: yes
-    scope: user
-  become: yes
-  become_user: streamwall
-
-- name: Enable RTMP outputs
-  systemd:
-    name: "rtmpoutput-{{ item.name }}"
-    enabled: yes
-    scope: user
-  become: yes
-  become_user: streamwall
-  loop: "{{ stream_rtmp_destinations }}"
-  loop_control:
-    label: "{{ item.name }}"
-
-- name: Enable HLS output
-  systemd:
-    name: hlsoutput
     enabled: yes
     scope: user
   become: yes

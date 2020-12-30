@@ -11,9 +11,10 @@
   route /live/* {
     uri strip_prefix live
     header Access-Control-Allow-Origin "*"
-    header Cache-Control max-age={{ hlsoutput_chunk_duration }}
-    header /*.ts Cache-Control max-age=600
-    root * /home/streamwall/hls
+    header Access-Control-Allow-Headers "Range"
+    header Access-Control-Expose-Headers "Date"
+    header Cache-Control max-age={{ stream_segment_duration }}
+    root * /home/streamwall/live
     file_server
   }
 
