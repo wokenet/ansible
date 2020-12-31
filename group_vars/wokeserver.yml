@@ -20,8 +20,7 @@ streamwall_announce_interval: 120
 streamwall_announce_delay: 20
 
 streamwall_cpu_affinity: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15"
-streamcapture_cpu_affinity: "16,17,18,19"
-streamdelay_cpu_affinity: "20,21,22,23"
+streamdelay_cpu_affinity: "16,17,18,19,20,21,22,23"
 
 streamdelay_in_pipeline: |
   # Capture Streamwall X window video
