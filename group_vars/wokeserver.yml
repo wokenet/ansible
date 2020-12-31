@@ -63,7 +63,9 @@ streamdelay_out_pipeline: |
   videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! nvh264enc bitrate=1000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-360
 
   # Encode 9000 kbps "curator stream" for archival and monitoring
-  videotee. ! queue ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mpegtsmux ! queue ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
+  videotee. ! queue ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
+  aactee. ! queue ! srtmux.
+  mpegtsmux name=srtmux ! queue ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
 
   # Mux for RTMP outputs
   flvmux name=rtmpflvmux streamable=true ! queue ! tee name=rtmpflvtee
