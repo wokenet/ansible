@@ -37,7 +37,7 @@ streamdelay_out_pipeline: |
   videoqueue. ! tee name=videotee
 
   # Encode Opus audio and send to shaka-packager
-  audiotee. ! queue ! audioconvert ! audioresample ! opusenc ! opusparse ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-opus
+  audiotee. ! queue ! audioconvert ! audioresample ! opusenc ! opusparse ! webmmux streamable=true min-cluster-duration=0 ! filesink location=/home/streamwall/ipc/packager-opus
 
   # Encode AAC audio (used by DASH/HLS and RTMP outputs)
   audiotee. ! queue ! voaacenc bitrate=96000 ! aacparse ! queue ! tee name=aactee
