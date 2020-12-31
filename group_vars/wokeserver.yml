@@ -43,24 +43,24 @@ streamdelay_out_pipeline: |
   aactee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-aac
 
   # Encode VP9 and send to shaka-packager
-  videotee. ! queue ! vp9enc target-bitrate=4000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=16 max-intra-bitrate=500 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-1080
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! vp9enc target-bitrate=2500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=24 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-720
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=855,height=480 ! vp9enc target-bitrate=1000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-480
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! vp9enc target-bitrate=500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-360
+  videotee. ! queue leaky=downstream ! vp9enc target-bitrate=4000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=16 max-intra-bitrate=500 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-1080
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! vp9enc target-bitrate=2500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=24 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-720
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=855,height=480 ! vp9enc target-bitrate=1000 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-480
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! vp9enc target-bitrate=500 end-usage=cbr cpu-used=5 deadline=1 min-quantizer=4 max-quantizer=32 max-intra-bitrate=300 lag-in-frames=0 ! webmmux streamable=true ! filesink location=/home/streamwall/ipc/packager-vp9-360
 
   # Encode H.264 1080p 5500kbps stream for DASH/HLS and to send to RTMP outputs
-  videotee. ! queue ! nvh264enc bitrate=5500 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! tee name=primaryh264tee
+  videotee. ! queue leaky=downstream ! nvh264enc bitrate=5500 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! tee name=primaryh264tee
 
   # Send H.264 1080p to shaka-packager
   primaryh264tee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-1080
 
   # Encode other H.264 streams and send to shaka-packager
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! nvh264enc bitrate=4000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-720
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=854,height=480 ! nvh264enc bitrate=2000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-480
-  videotee. ! queue ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! nvh264enc bitrate=1000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-360
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! nvh264enc bitrate=4000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-720
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=854,height=480 ! nvh264enc bitrate=2000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-480
+  videotee. ! queue leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! nvh264enc bitrate=1000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-360
 
   # Encode 9000 kbps "curator stream" for archival and monitoring
-  videotee. ! queue ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
+  videotee. ! queue leaky=downstream ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
   aactee. ! queue ! srtmux.
   mpegtsmux name=srtmux ! queue ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
 
