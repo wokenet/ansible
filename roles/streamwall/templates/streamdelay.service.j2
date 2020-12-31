@@ -5,7 +5,7 @@ PartOf=stream.target
 [Service]
 Restart=always
 RestartSec=1s
-ExecStart=npm start -- --config={{ streamdelay_config_path }}
+ExecStart=npm start -- --config={{ streamdelay_config_path }} --enable-gpu-rasterization --enable-native-gpu-memory-buffers --ignore-gpu-blacklist
 Environment=GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0/
 WorkingDirectory=/home/streamwall/streamdelay
 CPUAffinity={{ streamdelay_cpu_affinity }}
