@@ -7,7 +7,7 @@ PartOf=stream.target
 [Service]
 Restart=always
 RestartSec=1s
-ExecStart=npm start -- --config={{ streamwall_config_path }}
+ExecStart=npm start -- --config={{ streamwall_config_path }} --enable-gpu-rasterization --enable-native-gpu-memory-buffers --ignore-gpu-blacklist
 WorkingDirectory=/home/streamwall/streamwall
 CPUAffinity={{ streamwall_cpu_affinity }}
 
