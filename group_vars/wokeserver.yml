@@ -73,17 +73,18 @@ streamdelay_out_pipeline: |
 
 streamdelay_out_script: |
   rm -f /home/streamwall/live/*;
+  TS=$(date +%s);
   /home/streamwall/packager-linux \
-    'in=/home/streamwall/ipc/packager-opus,stream=audio,bw=64000,init_segment=/home/streamwall/live/opus_init.webm,segment_template=/home/streamwall/live/opus_$Number$.webm' \
-    'in=/home/streamwall/ipc/packager-aac,stream=audio,bw=96000,init_segment=/home/streamwall/live/aac_init.mp4,segment_template=/home/streamwall/live/aac_$Number$.m4s,hls_group_id=audio' \
-    'in=/home/streamwall/ipc/packager-vp9-1080,stream=video,bw=4000000,init_segment=/home/streamwall/live/vp9_1080p_init.webm,segment_template=/home/streamwall/live/vp9_1080p_$Number$.webm' \
-    'in=/home/streamwall/ipc/packager-vp9-720,stream=video,bw=2500000,init_segment=/home/streamwall/live/vp9_720p_init.webm,segment_template=/home/streamwall/live/vp9_720p_$Number$.webm' \
-    'in=/home/streamwall/ipc/packager-vp9-480,stream=video,bw=1000000,init_segment=/home/streamwall/live/vp9_480p_init.webm,segment_template=/home/streamwall/live/vp9_480p_$Number$.webm' \
-    'in=/home/streamwall/ipc/packager-vp9-360,stream=video,bw=500000,init_segment=/home/streamwall/live/vp9_360p_init.webm,segment_template=/home/streamwall/live/vp9_360p_$Number$.webm' \
-    'in=/home/streamwall/ipc/packager-h264-1080,stream=video,bw=5500000,init_segment=/home/streamwall/live/h264_1080p_init.mp4,segment_template=/home/streamwall/live/h264_1080p_$Number$.m4s' \
-    'in=/home/streamwall/ipc/packager-h264-720,stream=video,bw=4000000,init_segment=/home/streamwall/live/h264_720p_init.mp4,segment_template=/home/streamwall/live/h264_720p_$Number$.m4s' \
-    'in=/home/streamwall/ipc/packager-h264-480,stream=video,bw=2000000,init_segment=/home/streamwall/live/h264_480p_init.mp4,segment_template=/home/streamwall/live/h264_480p_$Number$.m4s' \
-    'in=/home/streamwall/ipc/packager-h264-360,stream=video,bw=1000000,init_segment=/home/streamwall/live/h264_360p_init.mp4,segment_template=/home/streamwall/live/h264_360p_$Number$.m4s' \
+    "in=/home/streamwall/ipc/packager-opus,stream=audio,bw=64000,init_segment=/home/streamwall/live/opus_${TS}_init.webm,segment_template=/home/streamwall/live/opus_${TS}_\\$Number$.webm" \
+    "in=/home/streamwall/ipc/packager-aac,stream=audio,bw=96000,init_segment=/home/streamwall/live/aac_${TS}_init.mp4,segment_template=/home/streamwall/live/aac_${TS}_\\$Number$.m4s,hls_group_id=audio" \
+    "in=/home/streamwall/ipc/packager-vp9-1080,stream=video,bw=4000000,init_segment=/home/streamwall/live/vp9_1080p_${TS}_init.webm,segment_template=/home/streamwall/live/vp9_1080p_${TS}_\\$Number$.webm" \
+    "in=/home/streamwall/ipc/packager-vp9-720,stream=video,bw=2500000,init_segment=/home/streamwall/live/vp9_720p_${TS}_init.webm,segment_template=/home/streamwall/live/vp9_720p_${TS}_\\$Number$.webm" \
+    "in=/home/streamwall/ipc/packager-vp9-480,stream=video,bw=1000000,init_segment=/home/streamwall/live/vp9_480p_${TS}_init.webm,segment_template=/home/streamwall/live/vp9_480p_${TS}_\\$Number$.webm" \
+    "in=/home/streamwall/ipc/packager-vp9-360,stream=video,bw=500000,init_segment=/home/streamwall/live/vp9_360p_${TS}_init.webm,segment_template=/home/streamwall/live/vp9_360p_${TS}_\\$Number$.webm" \
+    "in=/home/streamwall/ipc/packager-h264-1080,stream=video,bw=5500000,init_segment=/home/streamwall/live/h264_1080p_${TS}_init.mp4,segment_template=/home/streamwall/live/h264_1080p_${TS}_\\$Number$.m4s" \
+    "in=/home/streamwall/ipc/packager-h264-720,stream=video,bw=4000000,init_segment=/home/streamwall/live/h264_720p_${TS}_init.mp4,segment_template=/home/streamwall/live/h264_720p_${TS}_\\$Number$.m4s" \
+    "in=/home/streamwall/ipc/packager-h264-480,stream=video,bw=2000000,init_segment=/home/streamwall/live/h264_480p_${TS}_init.mp4,segment_template=/home/streamwall/live/h264_480p_${TS}_\\$Number$.m4s" \
+    "in=/home/streamwall/ipc/packager-h264-360,stream=video,bw=1000000,init_segment=/home/streamwall/live/h264_360p_${TS}_init.mp4,segment_template=/home/streamwall/live/h264_360p_${TS}_\\$Number$.m4s" \
     --mpd_output /home/streamwall/live/dash.mpd \
     --hls_master_playlist_output /home/streamwall/live/hls.m3u8 --hls_playlist_type=live \
     --utc_timings=urn:mpeg:dash:utc:http-head:2014={{ stream_endpoint }}/dash.mpd \
