@@ -13,7 +13,11 @@
     header Access-Control-Allow-Origin "*"
     header Access-Control-Allow-Headers "Range"
     header Access-Control-Expose-Headers "Date"
-    header Cache-Control max-age={{ stream_segment_duration }}
+
+    header Cache-Control max-age=360
+    @manifest path /dash.mpd /hls.m3u8
+    header @manifest Cache-Control max-age={{ stream_segment_duration }}
+
     root * /home/streamwall/live
     file_server
   }
