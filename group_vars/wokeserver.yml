@@ -4,7 +4,7 @@ channel_name: woke
 stream_width: 1920
 stream_height: 1080
 stream_delay: 10
-stream_segment_duration: 4
+stream_segment_duration: 2
 grid_count: 6
 curators_srt_out_uri: "srt://:5000?mode=listener"
 streambackup_srt_in_uri: "srt://127.0.0.1:5000?mode=caller"
