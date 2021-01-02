@@ -21,9 +21,9 @@ streamwall_announce_delay: 20
 
 streamdelay_in_pipeline: |
   # Capture Streamwall X window video
-  ximagesrc show-pointer=false xname="Streamwall" use-damage=false ! video/x-raw,framerate=30/1 ! videoconvert ! queue ! identity name="videoinput"
+  ximagesrc show-pointer=false xname="Streamwall" use-damage=false ! video/x-raw,framerate=30/1 ! videoconvert ! maindelayqueue. maindelayqueue. ! identity name="videoinput"
   # Capture pulseaudio audio and apply dynamic range compression
-  pulsesrc ! audioconvert ! ladspa-sc4-1882-so-sc4 threshold-level=-5 ratio=4 makeup-gain=10 ! ladspa-fast-lookahead-limiter-1913-so-fastlookaheadlimiter limit=-3 ! queue ! audioconvert ! audio/x-raw,channels=1 ! identity name="audioinput"
+  pulsesrc ! audioconvert ! ladspa-sc4-1882-so-sc4 threshold-level=-5 ratio=4 makeup-gain=10 ! ladspa-fast-lookahead-limiter-1913-so-fastlookaheadlimiter limit=-3 ! audioconvert ! audio/x-raw,channels=1 ! auxdelayqueue. auxdelayqueue. ! identity name="audioinput"
 
 streamdelay_out_pipeline: |
   # Queue outputs from streamdelay
