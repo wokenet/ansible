@@ -21,9 +21,11 @@ streamwall_announce_delay: 20
 
 streamdelay_in_pipeline: |
   # Capture Streamwall X window video
-  ximagesrc show-pointer=false xname="Streamwall" use-damage=false ! video/x-raw,framerate=30/1 ! videoconvert ! maindelayqueue. maindelayqueue. ! identity name="videoinput"
+  ximagesrc show-pointer=false xname="Streamwall" use-damage=false ! video/x-raw,framerate=30/1 ! videoconvert ! queue ! tee name="srcvideotee"
+  srcvideotee. ! maindelayqueue. maindelayqueue. ! identity name="videoinput"
   # Capture pulseaudio audio and apply dynamic range compression
-  pulsesrc ! audioconvert ! ladspa-sc4-1882-so-sc4 threshold-level=-5 ratio=4 makeup-gain=10 ! ladspa-fast-lookahead-limiter-1913-so-fastlookaheadlimiter limit=-3 ! audioconvert ! audio/x-raw,channels=1 ! auxdelayqueue. auxdelayqueue. ! identity name="audioinput"
+  pulsesrc ! audioconvert ! ladspa-sc4-1882-so-sc4 threshold-level=-5 ratio=4 makeup-gain=10 ! ladspa-fast-lookahead-limiter-1913-so-fastlookaheadlimiter limit=-3 ! audioconvert ! audio/x-raw,channels=1 ! queue ! tee name=srcaudiotee
+  srcaudiotee. ! auxdelayqueue. auxdelayqueue. ! identity name="audioinput"
 
 streamdelay_out_pipeline: |
   # Queue outputs from streamdelay
@@ -57,8 +59,8 @@ streamdelay_out_pipeline: |
   videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! nvh264enc bitrate=1000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-360
 
   # Encode 9000 kbps "curator stream" for archival and monitoring
-  videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
-  aactee. ! queue ! srtmux.
+  srcvideotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
+  srcaudiotee. ! queue ! voaacenc bitrate=96000 ! aacparse ! queue ! srtmux.
   mpegtsmux name=srtmux ! queue ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
 
   # Mux for RTMP outputs
