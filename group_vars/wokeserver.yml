@@ -88,4 +88,4 @@ streamdelay_out_script: |
     --mpd_output /home/streamwall/live/dash.mpd --allow_approximate_segment_timeline \
     --hls_master_playlist_output /home/streamwall/live/hls.m3u8 --hls_playlist_type=live \
     --utc_timings=urn:mpeg:dash:utc:http-head:2014={{ stream_endpoint }}/dash.mpd \
-    --segment_duration={{ stream_segment_duration }} --min_buffer_time={{ stream_segment_duration * 2 }} --minimum_update_period={{ stream_segment_duration }} --time_shift_buffer_depth=60 --preserved_segments_outside_live_window=10
+    --segment_duration={{ stream_segment_duration }} --min_buffer_time={{ stream_segment_duration }} --suggested_presentation_delay={{ stream_segment_duration * 2 }} --minimum_update_period={{ stream_segment_duration }} --time_shift_buffer_depth=60 --preserved_segments_outside_live_window=10
