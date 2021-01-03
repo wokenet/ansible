@@ -1,61 +1,13 @@
 ---
-- name: Install build deps
+- name: Install deps
   apt:
     name:
-      - build-essential
-      - cmake
-      - meson
-      - nvidia-cuda-dev
-      - libgstreamer1.0-dev
-      - libgstreamer-plugins-base1.0-dev
+      - nvidia-driver-455
+      - libnvidia-compute-455
+      - libnvidia-encode-455
     state: present
 
-- name: Install nvidia deps
-  apt:
-    name:
-      - nvidia-driver-440-server
-    state: present
-
-- name: Update gst-plugins-bad repo
-  git:
-    repo: https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
-    dest: /home/ansible/gst-plugins-bad
-    version: 0889213e082e2fa3b740de827f8ade6abcd69585  # 1.16
-    update: yes
-    force: yes
-  become: no
-  register: plugins_git
-
-- name: Reset nvenc gstreamer build directory
+- name: Remove obsolete nvenc gstreamer plugin
   file:
-    path: /home/ansible/gst-plugins-bad/build
+    path: /usr/local/lib/gstreamer-1.0/libgstnvenc.so
     state: absent
-  when: plugins_git.changed
-
-- name: Configure nvenc gstreamer plugin
-  shell:
-    chdir: /home/ansible/gst-plugins-bad
-    cmd: CUDA_PATH=/usr meson -Dauto_features=disabled -Dnvenc=enabled -Dgl=enabled build
-  become: no
-  when: plugins_git.changed
-
-- name: Build nvenc gstreamer plugin
-  shell:
-    chdir: /home/ansible/gst-plugins-bad/build
-    cmd: ninja
-  become: no
-  when: plugins_git.changed
-
-- name: Create local gstreamer plugins directory
-  file:
-    path: /usr/local/lib/gstreamer-1.0/
-    state: directory
-  when: plugins_git.changed
-
-- name: Install nvenc gstreamer plugin
-  copy:
-    src: /home/ansible/gst-plugins-bad/build/sys/nvenc/libgstnvenc.so
-    dest: /usr/local/lib/gstreamer-1.0/
-    mode: +r
-    remote_src: yes
-  when: plugins_git.changed
