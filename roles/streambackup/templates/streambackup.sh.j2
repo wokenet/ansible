@@ -12,7 +12,7 @@ do
         sleep 0.5
     else
         timeout $timeoutTime gst-launch-1.0 -v -e \
-            srtsrc uri=srt://{{ streambackup_srt_in_uri }} ! queue ! tsparse set-timestamps=true ! tsdemux name=demux \
+            srtsrc uri={{ streambackup_srt_in_uri }} ! queue ! tsparse set-timestamps=true ! tsdemux name=demux \
             demux. ! queue max-size-time=0 max-size-buffers=0 ! h264parse ! mux. \
             demux. ! queue max-size-time=0 max-size-buffers=0 ! aacparse ! mux. \
             flvmux name=mux streamable=true ! queue ! filesink enable-last-sample=false location="$backupPath/$backupName"
