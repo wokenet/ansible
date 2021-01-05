@@ -61,7 +61,7 @@ streamdelay_out_pipeline: |
   # Encode 9000 kbps "curator stream" for archival and monitoring
   srcvideotee. ! queue ! nvh264enc bitrate=9000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! srtmux.
   srcaudiotee. ! queue ! voaacenc bitrate=96000 ! aacparse ! queue ! srtmux.
-  mpegtsmux name=srtmux ! queue leaky=downstream ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false async=false
+  mpegtsmux name=srtmux ! queue leaky=downstream ! srtsink name=curators-out uri={{ curators_srt_out_uri }} wait-for-connection=false
 
   # Mux for RTMP outputs
   flvmux name=rtmpflvmux streamable=true ! queue ! tee name=rtmpflvtee
