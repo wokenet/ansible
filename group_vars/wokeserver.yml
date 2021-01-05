@@ -36,10 +36,10 @@ streamdelay_out_pipeline: |
   audiotee. ! queue ! audioconvert ! audioresample ! opusenc ! opusparse ! webmmux streamable=true min-cluster-duration=0 ! filesink buffer-size=8184 location=/home/streamwall/ipc/packager-opus
 
   # Encode AAC audio (used by DASH/HLS and RTMP outputs)
-  audiotee. ! queue ! voaacenc bitrate=96000 ! aacparse ! queue ! tee name=aactee
+  audiotee. ! queue ! voaacenc bitrate=96000 ! queue ! tee name=aactee
 
   # Send AAC audio and send to shaka-packager
-  aactee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink buffer-size=8184 location=/home/streamwall/ipc/packager-aac
+  aactee. ! queue ! aacparse ! mp4mux faststart=true fragment-duration=1000 ! filesink buffer-size=8184 location=/home/streamwall/ipc/packager-aac
 
   # Encode VP9 and send to shaka-packager
   videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! vp9enc target-bitrate=4500 end-usage=cq cq-level=6 cpu-used=7 deadline=1 min-quantizer=4 max-quantizer=38 lag-in-frames=0 keyframe-max-dist=60 ! webmmux streamable=true min-cluster-duration=0 ! filesink location=/home/streamwall/ipc/packager-vp9-1080
@@ -48,10 +48,10 @@ streamdelay_out_pipeline: |
   videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=640,height=360 ! vp9enc target-bitrate=500 end-usage=cq cq-level=6 cpu-used=7 deadline=1 min-quantizer=4 max-quantizer=38 lag-in-frames=0 keyframe-max-dist=60 ! webmmux streamable=true min-cluster-duration=0 ! filesink location=/home/streamwall/ipc/packager-vp9-360
 
   # Encode H.264 1080p 5500kbps stream for DASH/HLS and to send to RTMP outputs
-  videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! nvh264enc bitrate=5500 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! queue ! tee name=primaryh264tee
+  videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! nvh264enc bitrate=5500 preset=hq rc-mode=cbr gop-size=60 ! queue ! tee name=primaryh264tee
 
   # Send H.264 1080p to shaka-packager
-  primaryh264tee. ! queue ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-1080
+  primaryh264tee. ! queue ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-1080
 
   # Encode other H.264 streams and send to shaka-packager
   videotee. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=100000000 leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=1280,height=720 ! nvh264enc bitrate=4000 preset=hq rc-mode=cbr gop-size=60 ! h264parse config-interval=2 ! mp4mux faststart=true fragment-duration=1000 ! filesink location=/home/streamwall/ipc/packager-h264-720
@@ -65,8 +65,8 @@ streamdelay_out_pipeline: |
 
   # Mux for RTMP outputs
   flvmux name=rtmpflvmux streamable=true ! queue ! tee name=rtmpflvtee
-  primaryh264tee. ! queue ! rtmpflvmux.
-  aactee. ! queue ! rtmpflvmux.
+  primaryh264tee. ! queue ! h264parse config-interval=2 ! rtmpflvmux.
+  aactee. ! queue ! aacparse ! rtmpflvmux.
 
   # Send to RTMP outputs
   {% for rtmp in stream_rtmp_destinations %}
