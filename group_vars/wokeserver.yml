@@ -1,4 +1,3 @@
-nodejs_version: "14.x"
 xorg_conf: xorg.nvidia.conf.j2
 channel_name: woke
 stream_width: 1920

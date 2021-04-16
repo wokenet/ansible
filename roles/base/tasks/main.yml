@@ -11,7 +11,22 @@
     update_cache: yes
   when: gnupg2_installed.failed
 
+- name: Forbid root SSH login
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '#?PermitRootLogin \w*'
+    replace: 'PermitRootLogin no'
+
+- name: Forbid SSH password login
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '#?#PasswordAuthentication \w*'
+    replace: 'PasswordAuthentication no'
+
 - name: Install git
   apt:
     name: git
     state: present
+
+- name: Install caddy
+  include: caddy.yml

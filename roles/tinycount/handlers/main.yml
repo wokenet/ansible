@@ -6,8 +6,3 @@
     state: restarted
     daemon_reload: yes
   become: yes
-
-- name: Reload caddy
-  systemd:
-    name: caddy
-    state: reloaded

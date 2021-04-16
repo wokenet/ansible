@@ -16,11 +16,6 @@
   become: yes
   become_user: streamwall
 
-- name: Reload caddy
-  systemd:
-    name: caddy
-    state: reloaded
-
 - name: Enable streamdelay
   systemd:
     name: streamdelay

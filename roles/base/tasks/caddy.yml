@@ -1,0 +1,24 @@
+---
+- name: Add caddy PPA
+  apt_repository:
+    repo: "deb [trusted=yes] https://apt.fury.io/caddy/ /"
+    state: present
+  register: caddy_repo
+
+- name: Update apt cache if repo was added
+  apt:
+    update_cache: yes
+  when: caddy_repo.changed
+
+- name: Install caddy
+  apt:
+    name: caddy
+    state: present
+
+- name: Create caddy log dir
+  file:
+    path: /var/log/caddy
+    state: directory
+    owner: caddy
+    group: caddy
+
