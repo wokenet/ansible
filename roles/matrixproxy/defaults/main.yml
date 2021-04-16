@@ -1,0 +1,8 @@
+matrixproxy_hostname: matrix-guest.woke.net
+
+matrixproxy_matrix_server: "https://matrix.woke.net"
+matrixproxy_access_token: "{{ vault_matrixproxy_access_token }}"
+matrixproxy_cache_ttl_seconds: 30
+
+matrixproxy_internal_start_port: 5000
+matrixproxy_count: 4

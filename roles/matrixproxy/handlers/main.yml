@@ -1,0 +1,7 @@
+---
+- name: Restart matrixproxy
+  systemd:
+    name: "matrixproxy@{{ item }}"
+    state: restarted
+  become: yes
+  loop: "{{ matrixproxy_ports }}"

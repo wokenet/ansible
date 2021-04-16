@@ -1,0 +1,56 @@
+---
+- name: Create matrixproxy user
+  user:
+    name: matrixproxy
+    home: /home/matrixproxy
+
+- name: Update matrixproxy repo
+  git:
+    repo: https://github.com/wokenet/matrix-guest-proxy.git
+    dest: /home/matrixproxy/matrixproxy
+    version: release
+    update: yes
+    force: yes
+  become: yes
+  become_user: matrixproxy
+  register: matrixproxy_repo
+  notify:
+    - Restart matrixproxy
+
+- name: Install matrixproxy npm deps
+  npm:
+    path: /home/matrixproxy/matrixproxy
+    ci: yes
+  become: yes
+  become_user: matrixproxy
+  when: matrixproxy_repo.changed
+
+- name: Enumerate service ports
+  set_fact:
+    matrixproxy_ports: "{{ range(matrixproxy_internal_start_port, matrixproxy_internal_start_port + matrixproxy_count) | list }}"
+
+- name: Add matrixproxy service file
+  template:
+    src: matrixproxy@.service.j2
+    dest: "/etc/systemd/system/matrixproxy@.service"
+    owner: root
+    group: root
+  notify:
+    - Restart matrixproxy
+
+- name: Enable matrixproxy
+  systemd:
+    name: "matrixproxy@{{ item }}"
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+  loop: "{{ matrixproxy_ports }}"
+  notify:
+    - Restart matrixproxy
+
+- name: Add Caddyfile
+  template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+  notify:
+    - Reload caddy

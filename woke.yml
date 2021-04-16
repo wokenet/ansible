@@ -27,6 +27,16 @@
   roles:
     - tinycount
 
+- name: Set up matrixproxy
+  hosts: matrixproxy
+  remote_user: ansible
+  become: yes
+  tags: matrixproxy
+  roles:
+    - base
+    - geerlingguy.nodejs
+    - matrixproxy
+
 - name: Setup netdata
   hosts: wokeserver
   remote_user: ansible

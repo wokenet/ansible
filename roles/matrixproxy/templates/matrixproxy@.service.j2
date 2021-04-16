@@ -1,0 +1,18 @@
+[Unit]
+Description=Matrix Guest Proxy Service
+After=network.target
+
+[Service]
+User=matrixproxy
+Group=matrixproxy
+Restart=always
+RestartSec=1s
+Environment=PORT=%i
+Environment=MATRIX_SERVER={{ matrixproxy_matrix_server }}
+Environment=MATRIX_ACCESS_TOKEN={{ matrixproxy_access_token }}
+Environment=CACHE_TTL_SECONDS={{ matrixproxy_cache_ttl_seconds }}
+ExecStart=npm start
+WorkingDirectory=/home/matrixproxy/matrixproxy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+{{ matrixproxy_hostname }} {
+  reverse_proxy {
+    {% set space = joiner(" ") %}
+    to {% for port in matrixproxy_ports -%}
+      {{ space() }}http://localhost:{{ port }}
+    {%- endfor %}
+  }
+
+  log {
+    output file /var/log/caddy/matrixproxy.log
+  }
+}
