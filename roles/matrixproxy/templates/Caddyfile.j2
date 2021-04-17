@@ -4,6 +4,7 @@
     to {% for port in matrixproxy_ports -%}
       {{ space() }}http://localhost:{{ port }}
     {%- endfor %}
+
   }
 
   log {
