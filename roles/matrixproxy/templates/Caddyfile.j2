@@ -1,3 +1,11 @@
+{{ matrix_hostname }}, {{ matrix_element_hostname }} {
+  reverse_proxy {{ matrix_internal_endpoint }}
+}
+
+{{ matrix_hostname }}:8448 {
+  reverse_proxy {{ matrix_internal_federation_endpoint }}
+}
+
 {{ matrixproxy_hostname }} {
   reverse_proxy {
     {% set space = joiner(" ") %}

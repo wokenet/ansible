@@ -1,3 +1,8 @@
+matrix_hostname: matrix.woke.net
+matrix_element_hostname: element.woke.net
+matrix_internal_endpoint: http://localhost:81
+matrix_internal_federation_endpoint: http://localhost:8449
+
 matrixproxy_hostname: matrix-guest.woke.net
 
 matrixproxy_matrix_server: "https://matrix.woke.net"
