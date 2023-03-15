@@ -6,6 +6,12 @@
   register: gnupg2_installed
   ignore_errors: true
 
+- name: Ensure acl installed
+  apt:
+    name: acl
+    state: present
+  ignore_errors: true
+
 - name: Update apt cache if repos not loaded
   apt:
     update_cache: yes

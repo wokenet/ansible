@@ -17,6 +17,7 @@
   become: yes
   tags: anchorbot
   roles:
+    - base
     - anchorbot
 
 - name: Set up tinycount
@@ -25,6 +26,7 @@
   become: yes
   tags: tinycount
   roles:
+    - base
     - tinycount
 
 - name: Set up matrixproxy
