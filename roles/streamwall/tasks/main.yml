@@ -16,43 +16,43 @@
     group: streamwall
 
 - name: Setup X server
-  include: xserver.yml
+  import_tasks: xserver.yml
   tags: xserver
 
 - name: Setup compton
-  include: compton.yml
+  import_tasks: compton.yml
   tags: compton
 
 - name: Setup streamcapture
-  include: streamcapture.yml
+  import_tasks: streamcapture.yml
   tags: streamcapture
 
 - name: Setup streamwall
-  include: streamwall.yml
+  import_tasks: streamwall.yml
   tags: streamwall
 
 - name: Setup streamdelay
-  include: streamdelay.yml
+  import_tasks: streamdelay.yml
   tags: streamdelay
 
 - name: Setup rtmp outputs
-  include: rtmpoutput.yml
+  import_tasks: rtmpoutput.yml
   tags: rtmpoutput
 
 - name: Setup HLS output
-  include: hlsoutput.yml
+  import_tasks: hlsoutput.yml
   tags: hlsoutput
 
 - name: Setup stream content
-  include: content.yml
+  import_tasks: content.yml
   tags: content
 
 - name: Setup caddy
-  include: caddy.yml
+  import_tasks: caddy.yml
   tags: caddy
 
 - name: Setup vnc
-  include: vnc.yml
+  import_tasks: vnc.yml
   tags: vnc
 
 - name: Add stream target service file

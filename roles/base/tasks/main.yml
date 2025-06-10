@@ -35,4 +35,4 @@
     state: present
 
 - name: Install caddy
-  include: caddy.yml
+  import_tasks: caddy.yml
