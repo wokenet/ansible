@@ -6,7 +6,6 @@
   roles:
     - base
     - gstreamer-nvenc
-    - geerlingguy.nodejs
     - streamwall
     - streambackup
 
@@ -36,7 +35,6 @@
   tags: matrixproxy
   roles:
     - base
-    - geerlingguy.nodejs
     - matrixproxy
 
 - name: Setup netdata
