@@ -36,11 +36,3 @@
   roles:
     - base
     - matrixproxy
-
-- name: Setup netdata
-  hosts: wokeserver
-  remote_user: ansible
-  become: yes
-  tags: netdata
-  roles:
-    - netdata
