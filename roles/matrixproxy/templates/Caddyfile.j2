@@ -19,3 +19,7 @@
     output file /var/log/caddy/matrixproxy.log
   }
 }
+
+{{ inventory_hostname }} {
+  import *.caddy
+}
